@@ -12,3 +12,18 @@ export const handleInputErrors = (req: Request, res: Response, next: NextFunctio
 
     next();
 }
+
+export async function taskInProject(req: Request, res: Response, next: NextFunction) {
+    try {
+        if(req.task.project.toString() !== req.project.id.toString()){
+            return res.status(403).json({
+                errors: {msg:'no valido'}
+            });
+        }
+        next()
+    } catch (error) {
+        return res.status(500).json({
+            errors: {msg:'error en el servidor'}
+        });  
+    }
+}
