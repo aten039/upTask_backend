@@ -5,9 +5,11 @@ import projectRouter from "./routes/projectRouter";
 import taskRouter from "./routes/taskRouter";
 import { corsConfig } from "./config/cors";
 import cors from 'cors'
+import authRouter from "./routes/authRouter";
 dotenv.config();
 connectDB();
 const app = express()
+
 app.use(cors(corsConfig));
 app.use(express.json());
 // configuracion cors sin utilizar biblioteca cors
@@ -23,5 +25,6 @@ app.use(express.json());
 
 app.use('/api/projects', projectRouter);
 app.use('/api/projects', taskRouter);
+app.use('/api/auth', authRouter);
 
 export default app
