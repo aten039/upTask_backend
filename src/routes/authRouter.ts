@@ -18,4 +18,19 @@ authRouter.post('/create-account',
     handleInputErrors,
     AuthController.createAccount)
 
+authRouter.post('/confirm-account', 
+    body('token')
+        .notEmpty().withMessage('El token es obligatorio'),
+    handleInputErrors,
+    AuthController.confirmAccount
+)
+
+authRouter.post('/login', 
+    body('email').isEmail().withMessage('el email no es valido'),
+    body('password')
+        .notEmpty().withMessage('el password no puede ir vacio'),
+    handleInputErrors,
+    AuthController.login
+)
+
 export default authRouter
