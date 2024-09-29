@@ -4,6 +4,7 @@ import { checkPassword, hashPassword } from "../utils/auth"
 import { generateToken } from "../utils/token"
 import Token from "../models/Token"
 import { AuthEmail } from "../emails/AuthEmail"
+import { generateJWT } from "../utils/jwt"
 
 export class AuthController {
 
@@ -86,7 +87,8 @@ export class AuthController {
                 return res.status(401).json({errors:{msg:'password incorrecto'}})
             }
             
-            res.status(200).send('has iniciado sesion')
+            const token = generateJWT({id:user.id})
+            res.status(200).send(token)
 
         } catch (error) {
             return res.status(500).json({errors:{msg:'ha ocurrido un error'}})
@@ -180,5 +182,9 @@ export class AuthController {
         } catch (error) {
             return res.status(500).json({errors:{msg:'ha ocurrido un error'}})
         }
+    }
+
+    static user = async(req:Request , res: Response)=>{
+        return res.json(req.user)
     }
 }

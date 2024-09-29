@@ -4,13 +4,14 @@ import { body, param } from "express-validator";
 import { handleInputErrors, taskInProject } from "../middleware/validation";
 import { validateProjectExists } from "../middleware/project";
 import { validateTaskExists } from "../middleware/task";
+import { authenticate } from "../middleware/auth";
 
 
 
 const router = Router();
 
 // router.param('projectId', validateProjectExists);
-
+router.use(authenticate)
 router.post('/:projectId/task',
     param('projectId').isMongoId().withMessage('el id no es valido'),
     body('name').notEmpty().withMessage('el nombre es obligatorio'),
