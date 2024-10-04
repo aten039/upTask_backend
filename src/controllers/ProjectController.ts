@@ -21,7 +21,8 @@ export class ProjectController {
         try {
             const projects = await Project.find({
                 $or:[
-                    {manager: {$in: req.user.id}}
+                    {manager: {$in: req.user.id}},
+                    {team: {$in: req.user.id}}
                 ]
             });
             res.status(200).json(projects);
@@ -33,13 +34,13 @@ export class ProjectController {
     static getProjectById = async (req: Request, res: Response)=>{
 
         try {
-        //     const project = await Project.findById(req.params.id).populate('tasks');
-        //     if( !project){
-        //         return res.status(404).json({errors:{msg:'proyecto no encontrado'}});
-        //     }
-        //    if(project.manager.toString() !== req.user.id.toString()){
-        //         return res.status(403).json({errors:{msg:'accion no valida'}});
-        //    }
+            const project = await Project.findById(req.params.projectId).populate('tasks');
+            if(!project){
+                 return res.status(404).json({errors:{msg:'proyecto no encontrado'}});
+            }
+            if(project.manager.toString() !== req.user.id.toString() && !project.team.includes(req.user.id)){
+                 return res.status(403).json({errors:{msg:'accion no valida'}});
+           }
            await req.project.populate('tasks')
             
            res.status(200).json(req.project)

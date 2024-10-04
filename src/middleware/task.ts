@@ -26,4 +26,19 @@ export async function validateTaskExists(req: Request, res:Response, next:NextFu
             errors: {msg:'error en el servidor'}
         });
     }
+
+}
+export async function hasAuthorizarion(req: Request, res:Response, next:NextFunction) {
+    try {
+        if(req.user.id.toString() !== req.project.manager.toString()){
+            return res.status(500).json({
+                errors: {msg:'acción no valida'}
+            });
+        }
+        next()
+    } catch (error) {
+        return res.status(500).json({
+            errors: {msg:'error en el servidor'}
+        });
+    }
 }
