@@ -9,22 +9,21 @@ import { authenticate } from "../middleware/auth";
 
 
 const router = Router();
-
-// router.param('projectId', validateProjectExists);
 router.use(authenticate)
+router.param('projectId', validateProjectExists);
+
 router.post('/:projectId/task',
     param('projectId').isMongoId().withMessage('el id no es valido'),
     body('name').notEmpty().withMessage('el nombre es obligatorio'),
     body('description').notEmpty().withMessage('la descripcion es obligatorio'),
     handleInputErrors,
-    validateProjectExists,
+    
     TaskController.createTask
 );
 
 router.get('/:projectId/task',
     param('projectId').isMongoId().withMessage('el id no es valido'),
     handleInputErrors,
-    validateProjectExists,
     TaskController.getTasks
 );
 
@@ -32,7 +31,6 @@ router.get('/:projectId/task/:taskId',
     param('projectId').isMongoId().withMessage('el id proyecto no es valido'),
     param('taskId').isMongoId().withMessage('el id tarea no es valido'),
     handleInputErrors,
-    validateProjectExists,
     validateTaskExists,
     taskInProject,
     TaskController.getTaskById
@@ -44,7 +42,6 @@ router.put('/:projectId/task/:taskId',
     body('name').notEmpty().withMessage('el nombre es obligatorio'),
     body('description').notEmpty().withMessage('la descripcion es obligatorio'),
     handleInputErrors,
-    validateProjectExists,
     validateTaskExists,
     taskInProject,
     TaskController.updateTask
@@ -54,7 +51,6 @@ router.delete('/:projectId/task/:taskId',
     param('projectId').isMongoId().withMessage('el id proyecto no es valido'),
     param('taskId').isMongoId().withMessage('el id tarea no es valido'),
     handleInputErrors,
-    validateProjectExists,
     validateTaskExists,
     taskInProject,
     TaskController.deleteTask
@@ -65,7 +61,6 @@ router.post('/:projectId/task/:taskId/status',
     param('taskId').isMongoId().withMessage('el id tarea no es valido'),
     body('status').notEmpty().withMessage('el status es obligatorio'),
     handleInputErrors,
-    validateProjectExists,
     validateTaskExists,
     taskInProject,
     TaskController.updateStatusTask

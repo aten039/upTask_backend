@@ -10,10 +10,10 @@ export class TaskController {
             const task = new Task(req.body);
             
             const project = req.project
-            task.project = project.id;
-            project.tasks.push(task.id);
+            task.project = project.id
+            project.tasks.push(task.id)
             await Promise.all([task.save(), project.save()]);
-            res.status(201).send('tarea creada correctamente');
+            return res.status(201).send('tarea creada correctamente');
         } catch (error) {
             return res.status(500).json({
                 errors: {msg:'error al crear tarea'}
