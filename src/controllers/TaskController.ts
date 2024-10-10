@@ -1,4 +1,5 @@
 
+import { populate } from "dotenv";
 import Task from "../models/Task";
 import type { Request, Response } from "express"
 
@@ -35,8 +36,10 @@ export class TaskController {
 
     static  getTaskById = async (req: Request, res:Response)=>{
         try {
-            
-            res.status(200).json(req.task)
+            const task = await Task.findById(req.task.id)
+            .populate({path:'completedBy.user', select:'_id name email'})
+            .populate({path:'notes', populate:{path:'createBy', select:'id name email'}})
+            res.status(200).json(task)
         } catch (error) {
             return res.status(500).json({
                 errors: {msg:'error obtener tarea'}
@@ -81,6 +84,12 @@ export class TaskController {
             const { status } = req.body
 
             req.task.status = status;
+            
+            const data = {
+                user:req.user.id,
+                status 
+            }
+            req.task.completedBy.push(data)
             await req.task.save();
             res.status(200).send('estado actualizado');
 
