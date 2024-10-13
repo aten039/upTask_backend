@@ -67,4 +67,34 @@ authRouter.get('/user',
     AuthController.user
 )
 
+// Profile 
+
+authRouter.put('/profile', 
+    authenticate,
+    body('name').notEmpty().withMessage('Nombre Obligatorio'),
+    body('email').isEmail().withMessage('Email no valido'),
+    handleInputErrors,
+    AuthController.updateProfile
+)
+
+authRouter.post('/update-password', 
+    authenticate,
+    body('current_password').isLength({min:8}).withMessage('el password debe tener mas de 8 caracteres'),
+    body('password').isLength({min:8}).withMessage('el password debe tener mas de 8 caracteres'),
+    body('password_confirmation').custom((value, {req})=>{ 
+        if( value !== req.body.password){
+            throw new Error('el password no coincide')
+        }
+        return true
+    }),
+    handleInputErrors,
+    AuthController.updatePassword
+)
+authRouter.post('/check-password', 
+    authenticate,
+    body('password').notEmpty().withMessage('El password es obligatorio'),
+    handleInputErrors,
+    AuthController.checkPassword
+)
+
 export default authRouter

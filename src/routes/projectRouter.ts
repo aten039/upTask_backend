@@ -5,7 +5,7 @@ import { handleInputErrors, taskInProject } from "../middleware/validation";
 import { authenticate } from "../middleware/auth";
 import { TeamController } from "../controllers/TeamController";
 import { validateProjectExists } from "../middleware/project";
-import { validateTaskExists } from "../middleware/task";
+import { hasAuthorizarion, validateTaskExists } from "../middleware/task";
 import { NoteController } from "../controllers/NoteController";
 
 const router = Router();
@@ -36,11 +36,13 @@ router.put('/:projectId',
     body('clientName').notEmpty().withMessage('El nombre del cliente es obligatorio'),
     body('description').notEmpty().withMessage('La descripcion del proyecto es obligatorio'),
     handleInputErrors,
+    hasAuthorizarion,
     ProjectController.updateProject);
 
 router.delete('/:projectId', 
     param('projectId').isMongoId().withMessage('Id no valido'),
     handleInputErrors,
+    hasAuthorizarion,
     ProjectController.deleteProject
 )
 

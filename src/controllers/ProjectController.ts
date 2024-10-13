@@ -53,15 +53,7 @@ export class ProjectController {
     static updateProject = async (req: Request, res: Response)=>{
 
         try {
-            
-        //     const project = await Project.findByIdAndUpdate(req.params.id, req.body);
         
-        //     if(!project){
-        //         return res.status(404).json({errors: {msg:'proyecto no encontrado'}});
-        //     }
-        //     if(project.manager.toString() !== req.user.id.toString()){
-        //         return res.status(403).json({errors:{msg:'accion no valida'}});
-        //    }
             await req.project.updateOne(req.body)
 
             res.status(200).send('proyecto actualizado');
@@ -75,15 +67,6 @@ export class ProjectController {
 
         try {
             
-        //     const project = await Project.findById(req.params.id);
-
-        //     if(!project){
-        //         res.status(404).json({errors: {msg:'proyecto no encontrado'}});
-        //     }
-        //     if(project.manager.toString() !== req.user.id.toString()){
-        //         return res.status(403).json({errors:{msg:'accion no valida'}});
-        //    }
-            //validar cosas antes de eliminar
             await req.project.deleteOne()
 
             res.status(200).send('eliminado correctamente');
